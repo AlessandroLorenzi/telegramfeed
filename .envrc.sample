@@ -1,0 +1,3 @@
+export TELEGRAM_TOKEN="bot_token"
+export TELEGRAM_USER="1234567"
+export DB_CONNECTION_STRING="sqlite:///./db.sqlite"
