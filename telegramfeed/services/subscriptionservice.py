@@ -1,12 +1,13 @@
 from time import sleep
 
 from telegramfeed import entities, repositories, services
+from .telegramservice import TelegramService
 
 
 class SubscriptionService:
     def __init__(
         self,
-        telegram: services.TelegramService,
+        telegram: TelegramService,
         subscription_repo: repositories.SubscriptionRepo,
     ):
         self.telegram = telegram
