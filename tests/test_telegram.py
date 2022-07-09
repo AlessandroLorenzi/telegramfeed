@@ -4,24 +4,36 @@ import pytest
 
 from .fixtures.container import container
 
+from telegramfeed import services
 
-@pytest.mark.skip(reason="Don't spam myself!")
-def test_send_message(container):
-    telegram_service = container.telegram_service()
+
+def test_send_message(container, requests_mock):
+    telegram_service: services.TelegramService = container.telegram_service()
     user = os.getenv("TELEGRAM_USER")
+    requests_mock.post(
+        f"https://api.telegram.org/bot{container.config.telegram_token()}/sendMessage",
+        json={},
+    )
+
     telegram_service.send_message(user, "Hello, world!")
 
 
-@pytest.mark.skip(reason="Don't spam myself!")
-def test_fetch_messages(container):
+def test_fetch_messages(container, requests_mock):
     telegram_service = container.telegram_service()
-    message = {}
-    offset = 0
-    while message is not None:
-        message = telegram_service.fetch_message(offset)
-        if message is None:
-            break
-        assert message.user_id is not None
-        assert message.text is not None
-        assert message.update_id is not None
-        offset = message.update_id + 1
+
+    requests_mock.post(
+        f"https://api.telegram.org/bot{container.config.telegram_token()}/getUpdates",
+        json={
+            "result": [
+                {
+                    "update_id": 1111,
+                    "message": {"text": "hello", "from": {"id": "123"}},
+                }
+            ]
+        },
+    )
+
+    message = telegram_service.fetch_message(0)
+    assert message.user_id is not None
+    assert message.text is not None
+    assert message.update_id is not None
