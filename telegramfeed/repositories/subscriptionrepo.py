@@ -1,14 +1,8 @@
+from datetime import datetime
+
 from sqlalchemy import text
-import datetime
 
-
-class Subscription:
-    def __init__(self, user_id, feed_url, last_check=None):
-        self.user_id = user_id
-        self.feed_url = feed_url
-        if last_check == None:
-            last_check = datetime.datetime.utcnow()
-        self.last_check = last_check
+from telegramfeed.entities import Subscription
 
 
 class SubscriptionRepo:
@@ -61,9 +55,7 @@ class SubscriptionRepo:
             Subscription(
                 user_id=row["user_id"],
                 feed_url=row["feed_url"],
-                last_check=datetime.datetime.strptime(
-                    row["last_check"], "%Y-%m-%d %H:%M:%S.%f"
-                ),
+                last_check=datetime.strptime(row["last_check"], "%Y-%m-%d %H:%M:%S.%f"),
             )
             for row in rows
         ]

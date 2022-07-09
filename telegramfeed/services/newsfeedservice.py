@@ -1,8 +1,9 @@
 import feedparser
+
 from telegramfeed import Article
 
 
-class NewsFeed:
+class NewsFeedService:
     def __init__(self, url) -> None:
         self.news_feed = feedparser.parse(url)
         self.title = self.news_feed.feed.title

@@ -1,16 +1,14 @@
+import json
 import os
 from typing import Optional
+
 import requests
-import json
 
-from .user_message import UserMessage
+from telegramfeed import entities
 
 
-class Telegram:
+class TelegramService:
     def __init__(self, token: Optional[str] = None):
-        if token is None:
-            token = os.getenv("TELEGRAM_TOKEN")
-
         self.token = token
 
     def send_message(self, user: str, message: str):
@@ -18,11 +16,11 @@ class Telegram:
             "sendMessage", {"chat_id": user, "text": message, "parse_mode": "markdown"}
         )
 
-    def fetch_message(self, offset: int = 0) -> Optional[UserMessage]:
+    def fetch_message(self, offset: int = 0) -> Optional[entities.UserMessage]:
         response = self.__post("getUpdates", {"offset": offset})
         if len(response["result"]) == 0:
             return None
-        return UserMessage(
+        return entities.UserMessage(
             user_id=response["result"][0]["message"]["from"]["id"],
             text=response["result"][0]["message"]["text"],
             update_id=response["result"][0]["update_id"],

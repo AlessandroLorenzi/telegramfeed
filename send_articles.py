@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-from telegramfeed.newsfeed import NewsFeed
-from telegramfeed.telegram import Telegram
-from telegramfeed.article import ArticleRepository
-from telegramfeed import TelegramFeed
-
-from sqlalchemy import text, create_engine
-
 import os
+
+from sqlalchemy import create_engine, text
+
+from telegramfeed import TelegramFeed
+from telegramfeed.article import ArticleRepository
+from telegramfeed.newsfeed import NewsFeed
+from telegramfeed.telegram import TelegramService
 
 
 def fetch_and_send(telegram_feed: TelegramFeed):
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     article_repository = ArticleRepository(engine)
     blogfeed = NewsFeed()
-    telegram = Telegram(user)
+    telegram = TelegramService(user)
 
     telegram_feed = TelegramFeed(article_repository, blogfeed, telegram)
     telegram_feed.fetch_and_send()
