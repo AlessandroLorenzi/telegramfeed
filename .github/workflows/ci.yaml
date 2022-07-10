@@ -43,7 +43,7 @@ jobs:
         run: poetry run pytest --asyncio-mode=strict -v --cov=.
 
       - name: create coverage badge
-        run: poetry run coverage-badge -o coverage.svg
+        run: poetry run coverage-badge > coverage.svg
 
       - name: Verify Changed files
         uses: tj-actions/verify-changed-files@v9
