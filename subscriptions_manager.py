@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
+import signal
+
 from dependency_injector.wiring import Provide, inject
 
 from telegramfeed.container import Container
-import signal
+import asyncio
 
 @inject
 def main(subscription_service=Provide[Container.subscription_service]):
-    subscription_service.listen_and_process()
+    asyncio.run(subscription_service.start())
+
 
 class GracefulKiller:
     def __init__(self):

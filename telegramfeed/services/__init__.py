@@ -1,2 +1,2 @@
-from .subscriptionservice import SubscriptionService
-from .telegramservice import TelegramService
+from .subscription_service import SubscriptionService
+from .telegram_service import TelegramService
