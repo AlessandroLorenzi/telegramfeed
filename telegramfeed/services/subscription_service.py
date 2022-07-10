@@ -7,6 +7,7 @@ from .telegram_service import TelegramService
 
 # TODO: extract command classes and inject them into the service
 
+
 class SubscriptionService:
     def __init__(
         self,
