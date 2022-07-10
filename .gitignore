@@ -4,3 +4,4 @@ __pycache__
 .envrc
 db.sqlite
 htmlcov
+.coverage
