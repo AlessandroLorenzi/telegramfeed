@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from .fixtures.container import container
-
 from telegramfeed import services
+
+from .fixtures.container import container
 
 
 def test_send_message(container, requests_mock):

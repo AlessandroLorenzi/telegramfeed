@@ -1,8 +1,11 @@
+import asyncio
 from time import sleep
 
 from telegramfeed import entities, repositories, services
-from .telegramservice import TelegramService
 
+from .telegram_service import TelegramService
+
+# TODO: extract command classes and inject them into the service
 
 class SubscriptionService:
     def __init__(
@@ -13,17 +16,20 @@ class SubscriptionService:
         self.telegram = telegram
         self.subscription_repo = subscription_repo
 
-    def listen_and_process(self):
+    async def start(self):
         print("SubscriptionService is listening for telegram messages...")
-        message = {}
+        self.request_to_stop = False
         offset = 0
-        while True:
+        while not self.request_to_stop:
             message = self.telegram.fetch_message(offset)
             if message is None:
-                sleep(1)
+                await asyncio.sleep(1)
                 continue
             offset = message.update_id + 1
             self.process(message)
+
+    def stop(self):
+        self.request_to_stop = True
 
     def subscribe(self, message: entities.UserMessage):
         feed_url = message.text.split(" ")[1]
