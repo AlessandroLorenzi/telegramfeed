@@ -1,14 +1,12 @@
+import asyncio
 import datetime
 import os
 
 import mock
+import pytest
 
 from telegramfeed import entities, services
 from telegramfeed.container import Container
-
-from telegramfeed.container import Container
-import asyncio
-import pytest
 
 
 class TestSubscriptionService:
@@ -118,10 +116,12 @@ class TestSubscriptionService:
         self.subscription_service.stop()
         await task
         # await task
-        self.mock_telegram_service.fetch_message.assert_has_calls([
-            mock.call(0), # first contact with 0
-            mock.call(2), # first message recived = 1, request from last message +1
-        ])
+        self.mock_telegram_service.fetch_message.assert_has_calls(
+            [
+                mock.call(0),  # first contact with 0
+                mock.call(2),  # first message recived = 1, request from last message +1
+            ]
+        )
 
     def generate_message(self, text: str) -> entities.UserMessage:
         test_telegram_user = os.getenv("TELEGRAM_USER")

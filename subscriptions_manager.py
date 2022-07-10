@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+import asyncio
 import signal
 
 from dependency_injector.wiring import Provide, inject
 
 from telegramfeed.container import Container
-import asyncio
+
 
 @inject
 def main(subscription_service=Provide[Container.subscription_service]):
