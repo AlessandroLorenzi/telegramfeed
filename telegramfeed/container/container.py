@@ -1,5 +1,7 @@
+import sqlalchemy
 from dependency_injector import containers, providers
 from sqlalchemy import create_engine
+from sqlalchemy.engine.base import Connectable
 
 from telegramfeed import repositories, services
 

@@ -70,10 +70,10 @@ class SubscriptionService:
         if len(subs) == 0:
             self.telegram.send_message(user_id, f"You have no subs!")
             return
-        message = "Your subscriptions:\n"
+        reply_msg = "Your subscriptions:\n"
         for sub in subs:
-            message += f"- {sub.feed_url}\n"
-        self.telegram.send_message(user_id, message)
+            reply_msg += f"- {sub.feed_url}\n"
+        self.telegram.send_message(user_id, reply_msg)
 
     def send_helper(self, message: entities.UserMessage):
         helper = """Command available:

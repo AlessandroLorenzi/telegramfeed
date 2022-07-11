@@ -23,6 +23,9 @@ jobs:
 
       - name: safety
         run: poetry run safety check
+      
+      - name: mypy
+        run: poetry run mypy . --ignore-missing-imports
 
   test_and_coverage:
     runs-on: ubuntu-latest
