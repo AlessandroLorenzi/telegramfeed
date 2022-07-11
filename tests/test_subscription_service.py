@@ -124,8 +124,7 @@ class TestSubscriptionService:
         )
 
     def generate_message(self, text: str) -> entities.UserMessage:
-        test_telegram_user = os.getenv("TELEGRAM_USER")
-        assert test_telegram_user is not None
+        test_telegram_user = "123123"
 
         return entities.UserMessage(
             user_id=test_telegram_user,
