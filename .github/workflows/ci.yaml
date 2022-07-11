@@ -48,13 +48,14 @@ jobs:
       - name: create coverage badge
         run: poetry run coverage-badge > telegramfeed_coverage.svg
 
-      - name: Deploy
-        uses: reggionick/s3-deploy@v3
+      - name: Upload coverage badge to bucket
+        uses: zdurham/s3-upload-github-action@master
         with:
-          folder: ./telegramfeed_coverage.svg
-          bucket: gitbadges.alorenzi.eu
-          bucket-region: eu-south-1
-          delete-removed: true
+          args: --acl public-read
         env:
+          FILE: ./telegramfeed_coverage.svg
+          AWS_REGION: eu-south-1
+          S3_BUCKET: gitbadges.alorenzi.eu
+          S3_KEY: telegramfeed_coverage.svg
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
