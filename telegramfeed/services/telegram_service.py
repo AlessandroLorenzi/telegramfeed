@@ -3,10 +3,10 @@ from typing import Optional
 
 import requests
 
-from telegramfeed import entities
+from telegramfeed import entities, interfaces
 
 
-class TelegramService:
+class TelegramService(interfaces.ChatInterface):
     def __init__(self, token: Optional[str] = None):
         self.token = token
 

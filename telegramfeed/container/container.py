@@ -18,6 +18,7 @@ class Container(containers.DeclarativeContainer):
     telegram_service = providers.Singleton(
         services.TelegramService, config.telegram_token
     )
+
     subscription_service = providers.Singleton(
         services.SubscriptionService,
         telegram=telegram_service,

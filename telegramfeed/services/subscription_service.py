@@ -1,9 +1,7 @@
 import asyncio
 from time import sleep
 
-from telegramfeed import entities, repositories, services
-
-from .telegram_service import TelegramService
+from telegramfeed import entities, interfaces, repositories
 
 # TODO: extract command classes and inject them into the service
 
@@ -11,7 +9,7 @@ from .telegram_service import TelegramService
 class SubscriptionService:
     def __init__(
         self,
-        telegram: TelegramService,
+        telegram: interfaces.ChatInterface,
         subscription_repo: repositories.SubscriptionRepo,
     ):
         self.telegram = telegram
