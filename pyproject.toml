@@ -6,7 +6,7 @@ authors = ["Alessandro Lorenzi <me@alorenzi.eu>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-alembic = "^1.8.0"
+alembic = "^1.8.1"
 requests = "^2.28.1"
 feedparser = "^6.0.10"
 dependency-injector = "^4.39.1"
