@@ -50,6 +50,7 @@ jobs:
 
       - name: Upload coverage badge to bucket
         uses: zdurham/s3-upload-github-action@master
+        if: github.ref_name == 'main'
         with:
           args: --acl public-read
         env:
