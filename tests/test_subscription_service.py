@@ -5,24 +5,18 @@ import mock
 import pytest
 
 from telegramfeed import entities, services
-from telegramfeed.container import Container
 
 
 class TestSubscriptionService:
     def setup(self):
-        self.container = Container()
-        self.container.config.db_connection_string.from_env("DB_CONNECTION_STRING")
-        self.container.config.telegram_token.from_env("TELEGRAM_TOKEN")
-        self.container.wire(modules=[__name__])
-
         self.mock_subscription_repo = mock.Mock()
         self.mock_telegram_service = mock.Mock()
 
-        self.container.subscription_repo.override(self.mock_subscription_repo)
-        self.container.telegram_service.override(self.mock_telegram_service)
-
         self.subscription_service: services.SubscriptionService = (
-            self.container.subscription_service()
+            services.SubscriptionService(
+                chat_interface=self.mock_telegram_service,
+                subscription_repo=self.mock_subscription_repo,
+            )
         )
 
     def test_subscribe(self):

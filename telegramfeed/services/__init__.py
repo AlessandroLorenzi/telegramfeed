@@ -1,2 +1,4 @@
+from .feed_downloader_service import FeedDownloaderService
+from .feeder_service import FeederService
 from .subscription_service import SubscriptionService
 from .telegram_service import TelegramService

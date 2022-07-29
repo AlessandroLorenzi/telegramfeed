@@ -9,18 +9,18 @@ from telegramfeed import entities, interfaces, repositories
 class SubscriptionService:
     def __init__(
         self,
-        telegram: interfaces.ChatInterface,
+        chat_interface: interfaces.ChatInterface,
         subscription_repo: repositories.SubscriptionRepo,
     ):
-        self.telegram = telegram
+        self.chat_interface = chat_interface
         self.subscription_repo = subscription_repo
 
     async def start(self):
-        print("SubscriptionService is listening for telegram messages...")
+        print("SubscriptionService is listening for messages...")
         self.request_to_stop = False
         offset = 0
         while not self.request_to_stop:
-            message = self.telegram.fetch_message(offset)
+            message = self.chat_interface.fetch_message(offset)
             if message is None:
                 await asyncio.sleep(1)
                 continue
@@ -39,11 +39,13 @@ class SubscriptionService:
         try:
             self.subscription_repo.save(subscription)
         except Exception:
-            self.telegram.send_message(
+            self.chat_interface.send_message(
                 user_id, f"You was alredy subscribed to {feed_url}!"
             )
             return
-        self.telegram.send_message(user_id, f"You have been subscribed to {feed_url}!")
+        self.chat_interface.send_message(
+            user_id, f"You have been subscribed to {feed_url}!"
+        )
 
     def unsubscribe(self, message: entities.UserMessage):
         feed_url = message.text.split(" ")[1]
@@ -54,9 +56,11 @@ class SubscriptionService:
         try:
             self.subscription_repo.delete(subscription)
         except Exception:
-            self.telegram.send_message(user_id, f"You wasn't subscribed to {feed_url}!")
+            self.chat_interface.send_message(
+                user_id, f"You wasn't subscribed to {feed_url}!"
+            )
             return
-        self.telegram.send_message(
+        self.chat_interface.send_message(
             user_id, f"You have been unsubscribed from {feed_url}!"
         )
 
@@ -66,19 +70,19 @@ class SubscriptionService:
 
         subs = self.subscription_repo.fetch_by_user_id(user_id)
         if len(subs) == 0:
-            self.telegram.send_message(user_id, f"You have no subs!")
+            self.chat_interface.send_message(user_id, f"You have no subs!")
             return
         reply_msg = "Your subscriptions:\n"
         for sub in subs:
             reply_msg += f"- {sub.feed_url}\n"
-        self.telegram.send_message(user_id, reply_msg)
+        self.chat_interface.send_message(user_id, reply_msg)
 
     def send_helper(self, message: entities.UserMessage):
         helper = """Command available:
 subscribe <feed>
 list
 """
-        self.telegram.send_message(message.user_id, helper)
+        self.chat_interface.send_message(message.user_id, helper)
 
     def process(self, message: entities.UserMessage):
         functions = {

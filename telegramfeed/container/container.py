@@ -1,4 +1,4 @@
-import sqlalchemy
+import feedparser
 from dependency_injector import containers, providers
 from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Connectable
@@ -21,6 +21,18 @@ class Container(containers.DeclarativeContainer):
 
     subscription_service = providers.Singleton(
         services.SubscriptionService,
-        telegram=telegram_service,
+        chat_interface=telegram_service,
         subscription_repo=subscription_repo,
     )
+
+    # feed_downloader_service = providers.Singleton(
+    #     services.FeedDownloaderService,
+    #     feedparser=feedparser,
+    # )
+
+    # feeder_service = providers.Singleton(
+    #     services.FeederService,
+    #     chat_interface=telegram_service,
+    #     subscription_repo=subscription_repo,
+    #     feed_downloader_service=feed_downloader_service,
+    # )
