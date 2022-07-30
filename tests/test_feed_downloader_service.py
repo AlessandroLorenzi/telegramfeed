@@ -1,12 +1,9 @@
-import asyncio
-import datetime
 import time
 
 import mock
 import pytest
 
-from telegramfeed import entities, services
-from telegramfeed.services.feeder_service import FeederService
+from telegramfeed import services
 
 
 class TestFeedDownloaderService:

@@ -59,5 +59,4 @@ class FeederService:
         try:
             self.chat_interface.send_message(subscription.user_id, entry["link"])
         except Exception as e:
-            print("Error sending message: {}".format(e))
-            print("entry: {}".format(entry))
+            print(f"Error sending message: {e}")

@@ -1,0 +1,25 @@
+strictness: medium
+test-warnings: true
+doc-warnings: true
+autodetect: false
+max-line-length: 120
+
+mypy:
+  run: true
+  ignore-missing-types: true
+  ignore-missing-imports: true
+
+pycodestyle:
+  full: true
+
+pylint:
+  run: true
+  disable:
+    - missing-function-docstring
+    - missing-class-docstring
+    - missing-module-docstring
+
+pydocstyle:
+  run: false
+
+## https://github.com/PyCQA/prospector/

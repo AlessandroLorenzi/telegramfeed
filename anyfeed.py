@@ -2,26 +2,30 @@
 import asyncio
 import os
 import signal
+import sys
 from typing import Any, List
 
 import feedparser
-from dependency_injector.wiring import Provide, inject
 from sqlalchemy import create_engine
 
 from telegramfeed import repositories, services
-from telegramfeed.container import Container
 
 
 class GracefulKiller:
     def __init__(self, tasks):
         self.tasks = tasks
+        self.i_want_to_exit_now = 0
         signal.signal(signal.SIGINT, self.exit_gracefully)
         signal.signal(signal.SIGTERM, self.exit_gracefully)
 
-    def exit_gracefully(self, signum, frame):
+    def exit_gracefully(self, _signum, _frame):
         print("Ask to stop")
         for task in self.tasks:
             task.stop()
+        self.i_want_to_exit_now += 1
+        if self.i_want_to_exit_now == 5:
+            print("Ok, I'm out")
+            sys.exit(0)
 
 
 async def main(services: List[Any]):

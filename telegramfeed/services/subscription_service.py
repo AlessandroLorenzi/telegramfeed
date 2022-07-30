@@ -1,5 +1,4 @@
 import asyncio
-from time import sleep
 
 from telegramfeed import entities, interfaces, repositories
 
@@ -70,7 +69,7 @@ class SubscriptionService:
 
         subs = self.subscription_repo.fetch_by_user_id(user_id)
         if len(subs) == 0:
-            self.chat_interface.send_message(user_id, f"You have no subs!")
+            self.chat_interface.send_message(user_id, "You have no subs!")
             return
         reply_msg = "Your subscriptions:\n"
         for sub in subs:
