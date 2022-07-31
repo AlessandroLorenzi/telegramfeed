@@ -6,4 +6,5 @@ class AllowListService:
         self.ids = ids
 
     def is_allowed(self, id: str) -> bool:
-        return id in self.ids
+        allowed = str(id) in self.ids
+        return allowed
