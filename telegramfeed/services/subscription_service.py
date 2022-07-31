@@ -2,6 +2,8 @@ import asyncio
 
 from telegramfeed import entities, interfaces, repositories
 
+from .allowlist_service import AllowListService
+
 # TODO: extract command classes and inject them into the service
 
 
@@ -10,9 +12,11 @@ class SubscriptionService:
         self,
         chat_interface: interfaces.ChatInterface,
         subscription_repo: repositories.SubscriptionRepo,
+        allowlist: AllowListService,
     ):
         self.chat_interface = chat_interface
         self.subscription_repo = subscription_repo
+        self.allowlist = allowlist
 
     async def start(self):
         print("SubscriptionService is listening for messages...")
@@ -78,16 +82,26 @@ class SubscriptionService:
 
     def send_helper(self, message: entities.UserMessage):
         helper = """Command available:
-subscribe <feed>
-list
+subscribe <feed> - subscribe to feed
+unsubscribe <feed> - unsubscribe from feed
+list - list your subscriptions
 """
         self.chat_interface.send_message(message.user_id, helper)
 
+    def send_unauthorized(self, user_id: str):
+        self.chat_interface.send_message(
+            user_id, "You are not authorized to use this bot!"
+        )
+
     def process(self, message: entities.UserMessage):
+        if not self.allowlist.is_allowed(message.user_id):
+            self.send_unauthorized(message.user_id)
+            return
+
         functions = {
             "subscribe": self.subscribe,
-            "list": self.list,
             "unsubscribe": self.unsubscribe,
+            "list": self.list,
         }
 
         command = message.text.split(" ")[0]

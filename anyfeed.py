@@ -41,6 +41,7 @@ async def main(services: List[Any]):
 
 
 if __name__ == "__main__":
+    # Inject Deps
     telegram_token = os.environ["TELEGRAM_TOKEN"]
     telegram_service = services.TelegramService(telegram_token)
 
@@ -52,9 +53,13 @@ if __name__ == "__main__":
         telegram_service, subscription_repo, feed_downloader_service
     )
 
+    allowlist_users = os.environ["ALLOWLIST_USERS"].split(",")
+    allowlist_service = services.AllowListService(allowlist_users)
+
     subscription_service = services.SubscriptionService(
         chat_interface=telegram_service,
         subscription_repo=subscription_repo,
+        allowlist=allowlist_service,
     )
 
     backgrownd_services: List[Any] = [feeder_service, subscription_service]
