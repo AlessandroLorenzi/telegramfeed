@@ -28,7 +28,7 @@ class TestSubscriptionService:
 
         self.mock_allowlist_service.is_allowed.assert_called_once()
         self.mock_chat_service.send_message.assert_called_once_with(
-            "123123", "You are not authorized to use this bot!"
+            "123123", "You (123123) are not authorized to use this bot!"
         )
 
     def test_subscribe(self):

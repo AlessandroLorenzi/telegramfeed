@@ -90,7 +90,7 @@ list - list your subscriptions
 
     def send_unauthorized(self, user_id: str):
         self.chat_interface.send_message(
-            user_id, "You are not authorized to use this bot!"
+            user_id, f"You ({user_id}) are not authorized to use this bot!"
         )
 
     def process(self, message: entities.UserMessage):
