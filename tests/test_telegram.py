@@ -43,6 +43,26 @@ class TestTelegramService:
         assert message.text is not None
         assert message.update_id is not None
 
+    def test_fetch_edited_message(self):
+
+        with requests_mock.Mocker() as mock:
+            mock.post(
+                f"https://api.telegram.org/bot{self.test_token}/getUpdates",
+                json={
+                    "result": [
+                        {
+                            "update_id": 1111,
+                            "edited_message": {"text": "hello", "from": {"id": "123"}},
+                        }
+                    ]
+                },
+            )
+            message = self.telegram_service.fetch_message(0)
+
+        assert message.user_id is not None
+        assert message.text is not None
+        assert message.update_id is not None
+
     def test_fetch_messages_empty(self):
         with requests_mock.Mocker() as mock:
             mock.post(

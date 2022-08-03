@@ -19,9 +19,17 @@ class TelegramService(interfaces.ChatInterface):
         response = self.__post("getUpdates", {"offset": offset})
         if len(response["result"]) == 0:
             return None
+
+        if "edited_message" in response["result"][0].keys():
+            text = response["result"][0]["edited_message"]["text"]
+            user_id = response["result"][0]["edited_message"]["from"]["id"]
+        else:
+            text = response["result"][0]["message"]["text"]
+            user_id = response["result"][0]["message"]["from"]["id"]
+
         return entities.UserMessage(
-            user_id=response["result"][0]["message"]["from"]["id"],
-            text=response["result"][0]["message"]["text"],
+            user_id=user_id,
+            text=text,
             update_id=response["result"][0]["update_id"],
         )
 
