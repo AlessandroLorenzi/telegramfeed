@@ -14,7 +14,6 @@ TEST_FEED_LINK = "https://blog.cleancoder.com/foo/bar"
 
 class TestFeederService:
     def setup(self):
-        self.test_wait_time = 0.1
 
         self.mock_subscription_repo = mock.Mock()
         self.mock_chat_interface = mock.Mock()
@@ -24,17 +23,12 @@ class TestFeederService:
             self.mock_chat_interface,
             self.mock_subscription_repo,
             self.mock_feed_downloader_service,
-            self.test_wait_time,
         )
 
-    @pytest.mark.asyncio
-    async def test_run_stop(self):
+    def test_run_stop(self):
         self.mock_subscription_repo.fetch_all.return_value = []
 
-        feeder_task = asyncio.Task(self.feeder_service.start())
-        await asyncio.sleep(self.test_wait_time)
-        self.feeder_service.stop()
-        await feeder_task
+        self.feeder_service.start()
 
     def test_process_feeds(self):
         self.mock_subscription_repo.fetch_all.return_value = [

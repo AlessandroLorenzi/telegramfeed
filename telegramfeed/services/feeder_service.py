@@ -1,4 +1,3 @@
-import asyncio
 import datetime
 import time
 
@@ -11,26 +10,21 @@ class FeederService:
         chat_interface: interfaces.ChatInterface,
         subscription_repo: repositories.SubscriptionRepo,
         feed_downloader_service: services.FeedDownloaderService,
-        wait_time_in_seconds=60,
     ):
         self.chat_interface = chat_interface
         self.subscription_repo = subscription_repo
         self.feed_downloader_service = feed_downloader_service
-        self.wait_time = wait_time_in_seconds
 
-    async def start(self):
-        print("FeederService is starting")
-        self.request_to_stop = False
-        while not self.request_to_stop:
-            self.process_feeds()
-            await asyncio.sleep(self.wait_time)
-
-    def stop(self):
-        self.request_to_stop = True
+    def start(self):
+        print("Processing feeds")
+        self.process_feeds()
 
     def process_feeds(self):
         subscriptions = self.subscription_repo.fetch_all()
         for subscription in subscriptions:
+            print(
+                f"Processing subscription {subscription.feed_url} for user {subscription.user_id}"
+            )
             self._manage_subscription(subscription)
 
     def _manage_subscription(self, subscription):
